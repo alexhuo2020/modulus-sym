@@ -66,7 +66,7 @@ class NavierStokes(PDE):
 
     name = "NavierStokes"
 
-    def __init__(self, nu, rho=1, dim=3, time=True, mixed_form=False):
+    def __init__(self, nu, rho=1, dim=3, time=True, mixed_form=False, convection_term=True):
         # set params
         self.dim = dim
         self.time = time
@@ -136,7 +136,16 @@ class NavierStokes(PDE):
                 - mu.diff(x) * u.diff(x)
                 - mu.diff(y) * v.diff(x)
                 - mu.diff(z) * w.diff(x)
-            )
+            ) if convection_term else (
+                (rho * u).diff(t)
+                + p.diff(x)
+                - (mu * u.diff(x)).diff(x)
+                - (mu * u.diff(y)).diff(y)
+                - (mu * u.diff(z)).diff(z)
+                - mu.diff(x) * u.diff(x)
+                - mu.diff(y) * v.diff(x)
+                - mu.diff(z) * w.diff(x)
+            ) 
             self.equations["momentum_y"] = (
                 (rho * v).diff(t)
                 + (
@@ -151,6 +160,15 @@ class NavierStokes(PDE):
                 - (mu * v.diff(y)).diff(y)
                 - (mu * v.diff(z)).diff(z)
                 - (mu * (curl).diff(y))
+                - mu.diff(x) * u.diff(y)
+                - mu.diff(y) * v.diff(y)
+                - mu.diff(z) * w.diff(y)
+            ) if convection_term else  (
+                (rho * v).diff(t)
+                + p.diff(y)
+                - (mu * v.diff(x)).diff(x)
+                - (mu * v.diff(y)).diff(y)
+                - (mu * v.diff(z)).diff(z)
                 - mu.diff(x) * u.diff(y)
                 - mu.diff(y) * v.diff(y)
                 - mu.diff(z) * w.diff(y)
@@ -172,7 +190,18 @@ class NavierStokes(PDE):
                 - mu.diff(x) * u.diff(z)
                 - mu.diff(y) * v.diff(z)
                 - mu.diff(z) * w.diff(z)
-            )
+            ) if convection_term else 
+             (
+                (rho * w).diff(t)
+                + p.diff(z)
+                - (mu * w.diff(x)).diff(x)
+                - (mu * w.diff(y)).diff(y)
+                - (mu * w.diff(z)).diff(z)
+                - (mu * (curl).diff(z))
+                - mu.diff(x) * u.diff(z)
+                - mu.diff(y) * v.diff(z)
+                - mu.diff(z) * w.diff(z)
+            ) 
 
             if self.dim == 2:
                 self.equations.pop("momentum_z")
