@@ -190,8 +190,7 @@ class NavierStokes(PDE):
                 - mu.diff(x) * u.diff(z)
                 - mu.diff(y) * v.diff(z)
                 - mu.diff(z) * w.diff(z)
-            ) if convection_term else 
-             (
+            ) if convection_term else (
                 (rho * w).diff(t)
                 + p.diff(z)
                 - (mu * w.diff(x)).diff(x)
