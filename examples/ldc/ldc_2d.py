@@ -42,7 +42,7 @@ from modulus.sym.utils.io import (
 @modulus.sym.main(config_path="conf", config_name="config")
 def run(cfg: ModulusConfig) -> None:
     # make list of nodes to unroll graph on
-    ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False, convection_term=False)
+    ns = NavierStokes(nu=1.0, rho=1.0, dim=2, time=False, convection_term=False)
     flow_net = instantiate_arch(
         input_keys=[Key("x"), Key("y")],
         output_keys=[Key("u"), Key("v"), Key("p")],
@@ -52,8 +52,8 @@ def run(cfg: ModulusConfig) -> None:
 
     # add constraints to solver
     # make geometry
-    height = 0.1
-    width = 0.1
+    height = 1#0.1
+    width = 1#0.1
     x, y = Symbol("x"), Symbol("y")
     rec = Rectangle((-width / 2, -height / 2), (width / 2, height / 2))
 
@@ -66,7 +66,8 @@ def run(cfg: ModulusConfig) -> None:
         geometry=rec,
         outvar={"u": 1.0, "v": 0},
         batch_size=cfg.batch_size.TopWall,
-        lambda_weighting={"u": 1.0 - 20 * Abs(x), "v": 1.0},  # weight edges to be zero
+        lambda_weighting={"u": 1.0 - 2 * Abs(x), "v": 1.0},  # weight edges to be zero
+        # lambda_weighting={"u": 1.0 - 20 * Abs(x), "v": 1.0},  # weight edges to be zero
         criteria=Eq(y, height / 2),
     )
     ldc_domain.add_constraint(top_wall, "top_wall")
