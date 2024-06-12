@@ -42,7 +42,7 @@ from modulus.sym.utils.io import (
 @modulus.sym.main(config_path="conf", config_name="config")
 def run(cfg: ModulusConfig) -> None:
     # make list of nodes to unroll graph on
-    ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False)
+    ns = NavierStokes(nu=0.01, rho=1.0, dim=2, time=False, convection_term=False)
     flow_net = instantiate_arch(
         input_keys=[Key("x"), Key("y")],
         output_keys=[Key("u"), Key("v"), Key("p")],
