@@ -106,14 +106,14 @@ def run(cfg: ModulusConfig) -> None:
         openfoam_var = pd.read_csv(to_absolute_path(file_path))
         # openfoam_invar_numpy = {'x': openfoam_var['x'].values, 'y': openfoam_var['y'].values}
         # openfoam_outvar_numpy = {'u': openfoam_var['u'].values, 'v': openfoam_var['v'].values}
-        # openfoam_invar_numpy = {
-        #     key: value for key, value in openfoam_var.items() if key in ["x", "y"]
-        # }
-        # openfoam_outvar_numpy = {
-        #     key: value for key, value in openfoam_var.items() if key in ["u", "v"]
-        # }
-        openfoam_invar_numpy = openfoam_var['x','y'].values
-        openfoam_outvar_numpy = openfoam_var['u','v'].values
+        openfoam_invar_numpy = {
+            key: value for key, value in openfoam_var.items() if key in ["x", "y"]
+        }
+
+        openfoam_outvar_numpy = {
+            key: value for key, value in openfoam_var.items() if key in ["u", "v"]
+        }
+        
         
         openfoam_validator = PointwiseValidator(
             nodes=nodes,
