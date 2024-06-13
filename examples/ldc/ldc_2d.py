@@ -103,7 +103,7 @@ def run(cfg: ModulusConfig) -> None:
         # openfoam_var = csv_to_dict(to_absolute_path(file_path), mapping)
         # openfoam_var["x"] += -width / 2  # center OpenFoam data
         # openfoam_var["y"] += -height / 2  # center OpenFoam data
-        openfoam_var = pd.read_csv(file_path)
+        openfoam_var = pd.read_csv(to_absolute_path(file_path))
         openfoam_invar_numpy = {'x': openfoam_var['x'].values, 'y': openfoam_var['y'].values}
         openfoam_outvar_numpy = {'u': openfoam_var['u'].values, 'v': openfoam_var['v'].values}
         # openfoam_invar_numpy = {
