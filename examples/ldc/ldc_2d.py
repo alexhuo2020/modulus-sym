@@ -96,18 +96,21 @@ def run(cfg: ModulusConfig) -> None:
     ldc_domain.add_constraint(interior, "interior")
 
     # add validator
-    file_path = "openfoam/cavity_uniformVel0.csv"
+    file_path = "stokes.csv"#"openfoam/cavity_uniformVel0.csv"
     if os.path.exists(to_absolute_path(file_path)):
-        mapping = {"Points:0": "x", "Points:1": "y", "U:0": "u", "U:1": "v", "p": "p"}
-        openfoam_var = csv_to_dict(to_absolute_path(file_path), mapping)
-        openfoam_var["x"] += -width / 2  # center OpenFoam data
-        openfoam_var["y"] += -height / 2  # center OpenFoam data
-        openfoam_invar_numpy = {
-            key: value for key, value in openfoam_var.items() if key in ["x", "y"]
-        }
-        openfoam_outvar_numpy = {
-            key: value for key, value in openfoam_var.items() if key in ["u", "v"]
-        }
+        # mapping = {"Points:0": "x", "Points:1": "y", "U:0": "u", "U:1": "v", "p": "p"}
+        # openfoam_var = csv_to_dict(to_absolute_path(file_path), mapping)
+        # openfoam_var["x"] += -width / 2  # center OpenFoam data
+        # openfoam_var["y"] += -height / 2  # center OpenFoam data
+        openfoam_var = pd.read_csv(file_path)
+        openfoam_invar_numpy = {'x': openfoam_var['x'].values, 'y': openfoam_var['y'].values}
+        openfoam_outvar_numpy = {'u': openfoam_var['u'].values, 'v': openfoam_var['v'].values, 'p':openfoam_var['p'].values}
+        # openfoam_invar_numpy = {
+        #     key: value for key, value in openfoam_var.items() if key in ["x", "y"]
+        # }
+        # openfoam_outvar_numpy = {
+        #     key: value for key, value in openfoam_var.items() if key in ["u", "v"]
+        # }
         openfoam_validator = PointwiseValidator(
             nodes=nodes,
             invar=openfoam_invar_numpy,
