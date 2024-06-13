@@ -18,7 +18,7 @@ import os
 import warnings
 
 from sympy import Symbol, Eq, Abs
-
+import pandas as pd 
 import modulus.sym
 from modulus.sym.hydra import to_absolute_path, instantiate_arch, ModulusConfig
 from modulus.sym.solver import Solver
